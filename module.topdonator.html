@@ -1,0 +1,61 @@
+<div class="module module--topdonator">
+    <div class="module__avatar">
+        {% if module.ign %}
+            <img src="" class="unselectable" id="topDonatorAvatar" data-username="{{module.ign}}"/>
+        {% else %}
+            <img src="https://i.gyazo.com/55571e51c8860743ae28df705b3f0c5e.png" class="unselectable" id="topDonatorAvatar"/>
+        {% endif %}
+    </div>
+    <div class="module__body">
+        <h2><i class="fas fa-star"></i> Top Donator</h2>
+        {% if module.ign %}
+            <p>{{ module.ign }},</p>
+            <p>
+                {% if module.displayAmount %}
+                    {{ __("donated") }} {{ module.total|money }} <small>{{ store.currency }}</small>
+                {% else %}
+                    {{ __("donated the most ") }}
+                {% endif %}
+                
+                {% if module.period == "hourly" %}
+                    {{ __("this hour.") }}
+                {% elseif module.period == "daily" %}
+                    {{ __("today.") }}
+                {% elseif module.period == "monthly" %}
+                    {{ __("this month.") }}
+                {% elseif module.period == "yearly" %}
+                   {{ __("this year.") }}
+                {% else %}
+                    {{ __("this week.") }}
+                {% endif %}    
+            </p>
+        {% else %}
+            <p>Your name and skin can be here!</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const userAvatar = document.getElementById("topDonatorAvatar");
+    
+    function fetchAvatar(ign, action) {
+        fetch(`https://playerdb.co/api/player/minecraft/${ign}`).then(response => response.json()).then(data => {
+            try {
+                action(`https://crafatar.com/renders/body/${data.data.player.raw_id}`)
+                console.log(`Succesfully fetched avatar from Craftar! (user: ${data.data.player.raw_id})`);   
+            } catch {
+                action(`https://minotar.net/body/${ign}/120.png`)
+                console.log(`Failed to fetch avatar from Craftar, fetched from Minotar instead! (user: ${data.data.player.raw_id})`);
+            }
+        }).catch(data => {
+            console.log(`Failed to retrieve user id, given its username (user: ${ign})`);
+        });
+    }
+    
+    function setAvatar(link) {
+        userAvatar.src = link;
+    }
+    {% if module.ign %}
+        fetchAvatar(userAvatar.dataset.username, setAvatar);
+    {% endif %}
+</script>

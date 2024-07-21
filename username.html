@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="body">
+        <div>
+            <div class="sidebar">
+                {{ modules|raw }}
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="featured">{{ modules|raw }}</div>
+            
+            <div class="panel">
+                <div class="panel__heading">
+                    <h1>Login</h1>
+                </div>
+                <div class="panel__body">
+                    <form method="post">
+                        <div class="username">
+                            <input type="text" name="ign" class="input--900" placeholder="Enter your username">
+                            <button class="btn btn--primary cursorAura" type="submit">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
+    </div>
+{% endblock %}
